@@ -1,4 +1,6 @@
 <?php
+require "vendor/autoload.php"; //used for PHPUnit
+
 $autoload = function ($class) {
     $path = str_replace("\\", "/", $class);
     $file = __DIR__."/".strtolower($path).".php";
