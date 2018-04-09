@@ -36,6 +36,7 @@ class Scraper
         return $html;
     }
 
+
     /*
     * Returns string (textContent property) from DOMElement object
     *
@@ -43,9 +44,12 @@ class Scraper
     */
     public function getTextContent($xpath)
     {
+        $text_contents = [];
+
         foreach ($this->getElements($xpath) as $element) {
             $text_contents[] = $element->textContent;
         }
+
         return $text_contents;
     }
 
