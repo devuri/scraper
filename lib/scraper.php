@@ -7,23 +7,20 @@ use DOMXPath;
 class Scraper
 {
     private $html; //html extracted from curl
-    private $url; //url useed to extract html
 
     public function __construct($url)
     {
-        $this->url = $url;
         try {
-            $this->html = $this->getHTML();
+            $this->html = $this->getHTML($url);
         } catch (\Exception $e) {
             return;
         }
     }
 
-    private function getHTML()
+    private function getHTML($url)
     {
-
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $html = curl_exec($ch);
         if (!curl_errno($ch)) {
@@ -39,14 +36,11 @@ class Scraper
         return $html;
     }
 
-    private function getHrefs($xpath)
-    {
-        foreach ($this->getElements($xpath) as $element) {
-            $hrefs[] = $element->getAttribute('href');
-        }
-        return $hrefs;
-    }
-
+    /*
+    * Returns string (textContent property) from DOMElement object
+    *
+    * http://php.net/manual/en/class.domelement.php
+    */
     public function getTextContent($xpath)
     {
         foreach ($this->getElements($xpath) as $element) {
@@ -56,7 +50,13 @@ class Scraper
     }
 
 
-    private function getElements($xpath)
+    /*
+    * Returns traversable object of DOMElement objects,
+    * based on XPath expression provided.
+    *
+    * http://php.net/manual/en/domxpath.query.php
+    */
+    public function getElements($xpath)
     {
         $dom_x_path = self::newDomXPath($this->html);
         if (!$dom_x_path->query($xpath)) {
@@ -66,7 +66,10 @@ class Scraper
         }
     }
 
-
+    /*
+    *  creates DOMXPath object from $html
+    *  http://php.net/manual/en/class.domxpath.php
+    */
     private static function newDomXPath($html)
     {
         $dom = new DomDocument();
