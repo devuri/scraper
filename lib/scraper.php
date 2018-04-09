@@ -4,7 +4,7 @@ namespace Lib;
 use DomDocument;
 use DOMXPath;
 
-class Scraper extends DomDocument
+class Scraper
 {
     private $html; //html extracted from curl
     private $url; //url useed to extract html
